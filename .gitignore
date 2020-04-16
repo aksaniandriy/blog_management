@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Blog/.vs/Blog
+/Blog/Blog.Api/obj
+/Blog/Blog.Common/obj
+/Blog/Blog.Database/bin/Debug/netstandard2.0
+/Blog/Blog.Database/obj
+/Blog/Blog.Services/obj
+/Blog/Blog.Api/bin/Debug/netcoreapp3.1/runtimes
+/Blog/Blog.Api/bin/Debug/netcoreapp3.1
+/Blog/Blog.Common/bin/Debug/netstandard2.0
+/Blog/Blog.Services/bin/Debug/netstandard2.0
