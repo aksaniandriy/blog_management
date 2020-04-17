@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Blog.Domain.Models;
+using Blog.Services.Models;
 
 namespace Blog.Services.Interfaces
 {
@@ -11,7 +11,7 @@ namespace Blog.Services.Interfaces
         /// </summary>
         /// <param name="postId">Post id</param>
         /// <param name="comment"></param>
-        /// <returns></returns>
-        Task AddAsync(Guid postId, CommentDto comment);
+        /// <returns>Comment Id</returns>
+        Task<OperationResult<int>> AddAsync(Guid postId, CommentDto comment);
     }
 }

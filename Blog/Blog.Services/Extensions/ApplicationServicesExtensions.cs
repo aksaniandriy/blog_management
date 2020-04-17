@@ -1,9 +1,8 @@
 ﻿using Blog.Database.Repositories;
-using Blog.Services;
 using Blog.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Blog.Common.Extensions
+namespace Blog.Services.Extensions
 {
     public static class ApplicationServicesExtensions
     {

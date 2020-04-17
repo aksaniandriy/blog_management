@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Blog.Database.Database;
 using Blog.Database.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Database.Repositories
 {
@@ -17,22 +19,32 @@ namespace Blog.Database.Repositories
 
         public Task<Post> GetAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return _context.Posts
+                .Include(x => x.Comments)
+                .FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
-        public Task<Post> AddAsync(Post post)
+        public async Task<Post> AddAsync(Post post)
         {
-            throw new NotImplementedException();
+            _context.Posts.Add(post);
+            await _context.SaveChangesAsync();
+
+            return post;
         }
 
-        public Task<IEnumerable<Post>> GetAllAsync()
+        public async Task<IEnumerable<Post>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Posts.OrderByDescending(x => x.CreatedUtc).ToListAsync();
         }
 
-        public Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var post = await _context.Posts.FindAsync(id);
+
+            _context.Remove(post);
+            var affectedRows = await _context.SaveChangesAsync();
+
+            return affectedRows > 0;
         }
     }
 }

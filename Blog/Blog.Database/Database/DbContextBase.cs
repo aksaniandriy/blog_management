@@ -12,7 +12,7 @@ namespace Blog.Database.Database
         public DbContextBase(DbContextOptions<T> options): base(options) { }
         /// <inheritdoc />
         /// <summary>
-        /// Automatically sync 'Created' and 'Updated' props
+        /// Automatically set 'Created' prop
         /// </summary>
         public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -23,7 +23,7 @@ namespace Blog.Database.Database
 
         /// <inheritdoc />
         /// <summary>
-        /// Automatically sync 'Created' and 'Updated' props
+        /// Automatically set 'Created' prop
         /// </summary>
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -34,7 +34,7 @@ namespace Blog.Database.Database
 
         /// <inheritdoc />
         /// <summary>
-        /// Automatically sync 'Created' and 'Updated' props
+        /// Automatically set 'Created' prop
         /// </summary>
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
@@ -45,7 +45,7 @@ namespace Blog.Database.Database
 
         /// <inheritdoc />
         /// <summary>
-        /// Automatically sync 'Created' and 'Updated' props
+        /// Automatically set 'Created' prop
         /// </summary>
         public override int SaveChanges()
         {

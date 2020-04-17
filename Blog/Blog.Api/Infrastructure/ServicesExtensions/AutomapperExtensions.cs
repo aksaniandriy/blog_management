@@ -1,4 +1,4 @@
-﻿using Blog.Common.Bootstrap;
+﻿using Blog.Services.Bootstrap;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Blog.Api.Infrastructure.ServicesExtensions

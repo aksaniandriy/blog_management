@@ -21,9 +21,25 @@ namespace Blog.Database.Repositories
             return _context.Comments.AnyAsync(x => x.PostId == postId);
         }
 
-        public Task<int> AddComment(Guid postId, Comment comment)
+        /// <summary>
+        /// Add comment to a post
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <param name="comment"></param>
+        /// <returns>Comment id</returns>
+        public async Task<int> AddComment(Guid postId, Comment comment)
         {
-            throw new NotImplementedException();
+            var post = await _context.Posts.Include(x => x.Comments).FirstOrDefaultAsync(x => x.Id.Equals(postId));
+            if (post == null)
+            {
+                throw new InvalidOperationException("The post doesn't exist in the DB");
+            }
+
+            post.Comments.Add(comment);
+            _context.Entry(post).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+            return comment.Id;
         }
     }
 }

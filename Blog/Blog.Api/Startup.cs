@@ -1,12 +1,14 @@
 using System.Reflection;
 using Blog.Api.Infrastructure.ServicesExtensions;
-using Blog.Common.Extensions;
+using Blog.Api.Middlewares;
 using Blog.Database.Database;
+using Blog.Services.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace Blog.Api
@@ -39,8 +41,8 @@ namespace Blog.Api
                 options.UseSqlServer(Configuration.GetConnectionString("BlogDbConnection")));
 
             services.AddAutoMapper();
-            services.AddControllers();
             services.AddApplicationServices();
+            services.AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -54,6 +56,8 @@ namespace Blog.Api
 
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseMiddleware<ApiExceptionHandler>();
 
             app.UseEndpoints(endpoints =>
             {

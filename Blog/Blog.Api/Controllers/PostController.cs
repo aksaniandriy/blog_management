@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using Blog.Api.Models;
-using Blog.Domain.Models;
 using Blog.Services.Interfaces;
 using Blog.Services.Models;
 using Microsoft.AspNetCore.Http;
@@ -51,39 +50,53 @@ namespace Blog.Api.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<PostDto>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> CreatePost([FromBody]CreatePostRequest request)
         {
             _logger.LogDebug($"CreatePost called with CreatePostRequest={JsonConvert.SerializeObject(request)}");
 
-            var dto = _mapper.Map<PostDto>(request);
-            await _postService.AddAsync(dto);
+            var dto = new PostDto(request.Title, request.Text);
+            var result = await _postService.AddAsync(dto);
 
-            return Ok();
+            if (!result.Success)
+                return BadRequest(result.FailureMessage);
+
+            return Ok(result);
         }
 
         [HttpPost("{postId:guid}/comment")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(OperationResult<int>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult AddComment([FromRoute]Guid postId, [FromBody]CreateCommentRequest request)
+        public async Task<IActionResult> AddComment([FromRoute]Guid postId, [FromBody]CreateCommentRequest request)
         {
             _logger.LogDebug($"AddComment called for post {postId} with request: {JsonConvert.SerializeObject(request)}");
 
-            return Ok(new List<BlogPost>());
+            var dto = new CommentDto(request.Text);
+            var result = await _commentService.AddAsync(postId, dto);
+
+            if (!result.Success)
+                return BadRequest(result.FailureMessage);
+
+            return Ok(result);
         }
 
         [HttpDelete("{postId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IActionResult DeletePost([FromRoute]Guid postId)
+        public async Task<IActionResult> DeletePost([FromRoute]Guid postId)
         {
             _logger.LogDebug($"DeletePost called with postId={postId}");
+            
+            var result = await _postService.DeleteAsync(postId);
 
-            return Ok(new List<BlogPost>());
+            if (!result.Success)
+                return BadRequest(result.FailureMessage);
+
+            return Ok(result);
         }
     }
 }
